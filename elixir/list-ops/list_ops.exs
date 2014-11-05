@@ -18,19 +18,15 @@ defmodule ListOps do
 
   @spec map(list, (any -> any)) :: list
   def map(list, function) do
-    reduce(list, [], &([function.(&1)|&2]))
-      |> reverse
+    reduce(list, [], &([function.(&1) | &2]))
+    |> reverse
   end
 
   @spec filter(list, (any -> as_boolean(term))) :: list
   def filter(list, function) do
     reduce(list, [], fn(head, acc) ->
-      if function.(head) do
-        [head|acc]
-      else
-        acc
-      end
-    end) |> reverse
+      if function.(head), do: [head | acc], else: acc end)
+    |> reverse
   end
 
   @type acc :: any
@@ -43,12 +39,12 @@ defmodule ListOps do
   @spec append(list, list) :: list
   def append(left, right) do
     reverse(left)
-      |> reduce(right, &([&1|&2]))
+    |> reduce(right, &([&1 | &2]))
   end
 
   @spec concat([[any]]) :: [any]
   def concat(list) do
     reverse(list)
-      |> reduce([], &append(&1, &2))
+    |> reduce([], &append(&1, &2))
   end
 end
