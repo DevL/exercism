@@ -1,4 +1,6 @@
 defmodule Words do
+  @word_delimiter_pattern ~r/[^\w-]|_/u
+
   @doc """
   Count the number of words in the sentence.
 
@@ -7,22 +9,14 @@ defmodule Words do
   @spec count(String.t) :: map()
   def count(sentence) do
     sentence
-      |> replace_punctuation
-      |> ignore_case
-      |> split_into_words
-      |> count_words
-  end
-
-  defp replace_punctuation(string, replacement \\ " ") do
-    Regex.replace(~r/[^\w-]|_/u, string, replacement)
-  end
-
-  defp ignore_case(string) do
-    String.downcase(string)
+    |> split_into_words
+    |> count_words
   end
 
   defp split_into_words(string) do
-    String.split(string)
+    string
+    |> String.downcase
+    |> String.split(@word_delimiter_pattern, trim: true)
   end
 
   defp count_words(words) do
