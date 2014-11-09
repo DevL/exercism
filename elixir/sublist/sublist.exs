@@ -12,7 +12,6 @@ defmodule Sublist do
     end
   end
 
-  defp includes?([], _), do: false
   defp includes?(left, right) when length(left) < length(right), do: false
   defp includes?(left, right) do
     (left |> starts_with? right) or (tl(left) |> includes? right)
