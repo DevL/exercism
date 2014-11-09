@@ -8,21 +8,21 @@ defmodule Anagram do
   end
 
   defp anagram_of?(candidate, word) do
-    word_letters = tokens(word)
-    candidate_letters = tokens(candidate)
+    word_tokens = tokens(word)
+    candidate_tokens = tokens(candidate)
 
-    (word_letters |> differs_from? candidate_letters) and (word_letters |> comprised_of? candidate_letters)
+    differs?(word_tokens, candidate_tokens) and has_same_constituents?(word_tokens, candidate_tokens)
   end
 
   defp tokens(string) do
     string |> String.downcase |> String.graphemes
   end
 
-  defp differs_from?(left, right) do
+  defp differs?(left, right) do
     left != right
   end
 
-  defp comprised_of?(left, right) do
+  defp has_same_constituents?(left, right) do
     Enum.sort(left) === Enum.sort(right)
   end
 end
