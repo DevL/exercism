@@ -9,11 +9,11 @@ defmodule Words do
   @spec count(String.t) :: map()
   def count(sentence) do
     sentence
-    |> split_into_words
+    |> split_into_countable_words
     |> count_words
   end
 
-  defp split_into_words(string) do
+  defp split_into_countable_words(string) do
     string
     |> String.downcase
     |> String.split(@word_delimiter_pattern, trim: true)
@@ -23,7 +23,11 @@ defmodule Words do
     Enum.reduce(words, %{}, &count_word/2)
   end
 
-  defp count_word(word, map) do
-    Map.put(map, word, Map.get(map, word, 0) + 1)
+  defp count_word(word, dictionary) do
+    Map.put(dictionary, word, next_count(dictionary, word))
+  end
+
+  defp next_count(dictionary, word) do
+    Map.get(dictionary, word, 0) + 1
   end
 end
