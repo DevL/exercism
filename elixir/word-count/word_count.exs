@@ -23,9 +23,8 @@ end
 defmodule EnumUtils do
   @doc """
   Count the number of occurrences of identical elements in an enumerable.
-
-  Returns a map.
   """
+  @spec count_occurrences(Enumerable.t) :: map()
   def count_occurrences(enumerable) do
     Enum.reduce(enumerable, %{}, &count_occurrence/2)
   end
