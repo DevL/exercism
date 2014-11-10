@@ -21,15 +21,20 @@ defmodule Words do
 end
 
 defmodule EnumUtils do
-  def count_occurances(values) do
-    Enum.reduce(values, %{}, &count_occurance/2)
+  @doc """
+  Count the number of occurances of identical elements in an enumerable.
+
+  Returns a map.
+  """
+  def count_occurances(enumerable) do
+    Enum.reduce(enumerable, %{}, &count_occurance/2)
   end
 
-  defp count_occurance(value, occurrences) do
-    Map.put(occurrences, value, next_count(occurrences, value))
+  defp count_occurance(element, occurrences) do
+    Map.put(occurrences, element, next_count(occurrences, element))
   end
 
-  defp next_count(occurrences, value) do
-    Map.get(occurrences, value, 0) + 1
+  defp next_count(occurrences, element) do
+    Map.get(occurrences, element, 0) + 1
   end
 end
