@@ -10,7 +10,7 @@ defmodule Words do
   def count(sentence) do
     sentence
     |> split_into_countable_words
-    |> EnumUtils.count_occurances
+    |> EnumUtils.count_occurrences
   end
 
   defp split_into_countable_words(string) do
@@ -22,15 +22,15 @@ end
 
 defmodule EnumUtils do
   @doc """
-  Count the number of occurances of identical elements in an enumerable.
+  Count the number of occurrences of identical elements in an enumerable.
 
   Returns a map.
   """
-  def count_occurances(enumerable) do
-    Enum.reduce(enumerable, %{}, &count_occurance/2)
+  def count_occurrences(enumerable) do
+    Enum.reduce(enumerable, %{}, &count_occurrence/2)
   end
 
-  defp count_occurance(element, occurrences) do
+  defp count_occurrence(element, occurrences) do
     Map.put(occurrences, element, next_count(occurrences, element))
   end
 
