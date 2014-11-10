@@ -10,7 +10,7 @@ defmodule Words do
   def count(sentence) do
     sentence
     |> split_into_countable_words
-    |> count_words
+    |> EnumUtils.count_occurances
   end
 
   defp split_into_countable_words(string) do
@@ -18,16 +18,18 @@ defmodule Words do
     |> String.downcase
     |> String.split(@word_delimiter_pattern, trim: true)
   end
+end
 
-  defp count_words(words) do
-    Enum.reduce(words, %{}, &count_word/2)
+defmodule EnumUtils do
+  def count_occurances(values) do
+    Enum.reduce(values, %{}, &count_occurance/2)
   end
 
-  defp count_word(word, dictionary) do
-    Map.put(dictionary, word, next_count(dictionary, word))
+  defp count_occurance(value, occurrences) do
+    Map.put(occurrences, value, next_count(occurrences, value))
   end
 
-  defp next_count(dictionary, word) do
-    Map.get(dictionary, word, 0) + 1
+  defp next_count(occurrences, value) do
+    Map.get(occurrences, value, 0) + 1
   end
 end
