@@ -15,8 +15,8 @@ defmodule Anagram do
 
   def receive_result(pid) do
     receive do
-      {:anagram, pid, anagram} -> [anagram]
-      {:not_anagram, pid} -> []
+      {:anagram, ^pid, anagram} -> [anagram]
+      {:not_anagram, ^pid} -> []
     end
   end
 
