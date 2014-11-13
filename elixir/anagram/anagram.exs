@@ -4,7 +4,28 @@ defmodule Anagram do
   """
   @spec match(String.t, [String.t]) :: [String.t]
   def match(base, candidates) do
-    candidates |> Enum.filter(&anagram_of?(&1, base))
+    workers = Enum.map(candidates, &process(&1, base))
+    workers |> Enum.flat_map(&receive_result(&1))
+  end
+
+  defp process(candidate, base) do
+    collector = self
+    spawn_link(fn -> anagram(candidate, base, collector) end)
+  end
+
+  def receive_result(pid) do
+    receive do
+      {:anagram, pid, anagram} -> [anagram]
+      {:not_anagram, pid} -> []
+    end
+  end
+
+  defp anagram(candidate, word, collector) do
+    if anagram_of?(candidate, word) do
+      send collector, {:anagram, self, candidate}
+    else
+      send collector, {:not_anagram, self}
+    end
   end
 
   defp anagram_of?(candidate, word) do
