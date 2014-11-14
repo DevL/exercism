@@ -6,15 +6,15 @@ defmodule Sublist do
   def compare(left, right) do
     cond do
       left === right -> :equal
-      right |> includes? left -> :sublist
-      left |> includes? right -> :superlist
+      right |> contains? left -> :sublist
+      left |> contains? right -> :superlist
       true -> :unequal
     end
   end
 
-  defp includes?(left, right) when length(left) < length(right), do: false
-  defp includes?(left, right) do
-    (left |> starts_with? right) or (tl(left) |> includes? right)
+  defp contains?(left, right) when length(left) < length(right), do: false
+  defp contains?(left, right) do
+    (left |> starts_with? right) or (tl(left) |> contains? right)
   end
 
   defp starts_with?(left, right) do
