@@ -4,8 +4,8 @@ defmodule Anagram do
   """
   @spec match(String.t, [String.t]) :: [String.t]
   def match(base, candidates) do
-    workers = Enum.map(candidates, &process(&1, base))
-    workers |> Enum.flat_map(&receive_result(&1))
+    Enum.map(candidates, &process(&1, base))
+    |> Enum.flat_map(&receive_result(&1))
   end
 
   defp process(candidate, base) do
