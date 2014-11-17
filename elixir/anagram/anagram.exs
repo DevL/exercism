@@ -4,12 +4,11 @@ defmodule Anagram do
   """
   @spec match(String.t, [String.t]) :: [String.t]
   def match(base, candidates) do
-    Enum.map(candidates, &process(&1, base))
+    Enum.map(candidates, &process(&1, base, self))
     |> Enum.flat_map(&receive_result(&1))
   end
 
-  defp process(candidate, base) do
-    collector = self
+  defp process(candidate, base, collector) do
     spawn_link(fn -> anagram(candidate, base, collector) end)
   end
 
