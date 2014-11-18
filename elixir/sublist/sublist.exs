@@ -14,7 +14,7 @@ defmodule Sublist do
 
   defp contains?(left, right) when length(left) < length(right), do: false
   defp contains?(left, right) do
-    (left |> starts_with? right) or (tl(left) |> contains? right)
+    (left |> starts_with? right) or (left |> tl |> contains? right)
   end
 
   defp starts_with?(left, right) do
