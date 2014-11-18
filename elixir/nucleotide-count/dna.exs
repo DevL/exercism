@@ -16,12 +16,11 @@ defmodule DNA do
   def count([], _), do: 0
   def count(strand, nucleotide) do
     strand
-    |> Enum.map(&(&1 == nucleotide))
-    |> Enum.reduce(0, &counter(&1, &2))
+    |> Enum.reduce(0, &count_matching(&1, nucleotide, &2))
   end
 
-  defp counter(true, acc), do: acc + 1
-  defp counter(false, acc), do: acc
+  defp count_matching(nucleotide, nucleotide, sum), do: sum + 1
+  defp count_matching(_, _, sum), do: sum
 
   @doc """
   Returns a summary of counts by nucleotide.
@@ -33,11 +32,25 @@ defmodule DNA do
   """
   @spec nucleotide_counts([char]) :: Dict.t
   def nucleotide_counts(strand) do
-    %{
-      ?A => count(strand, ?A),
-      ?T => count(strand, ?T),
-      ?C => count(strand, ?C),
-      ?G => count(strand, ?G)
-    }
+    @nucleotides
+    |> Enum.map(&process(strand, &1))
+    |> Enum.reduce(%{}, &collate(&1, &2))
+  end
+
+  defp process(strand, nucleotide) do
+    collector = self
+    spawn_link fn -> report(collector, strand, nucleotide) end
+  end
+
+  defp report(collector, strand, nucleotide) do
+    send collector,
+      {:nucleotide_count, self, nucleotide, count(strand, nucleotide)}
+  end
+
+  defp collate(from, into) do
+    receive do
+      {:nucleotide_count, ^from, nucleotide, result} ->
+        Map.put(into, nucleotide, result)
+    end
   end
 end
