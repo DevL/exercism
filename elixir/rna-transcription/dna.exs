@@ -1,6 +1,4 @@
 defmodule DNA do
-  @transcription_rules %{ ?G => ?C, ?C => ?G, ?T => ?A, ?A => ?U }
-
   @doc """
   Transcribes a character list representing DNA nucleotides to RNA
 
@@ -14,7 +12,8 @@ defmodule DNA do
     dna |> Enum.map(&transcribe(&1))
   end
 
-  defp transcribe(nucleotide) do
-    @transcription_rules |> Map.get nucleotide
-  end
+  defp transcribe(?G), do: ?C
+  defp transcribe(?C), do: ?G
+  defp transcribe(?T), do: ?A
+  defp transcribe(?A), do: ?U
 end
