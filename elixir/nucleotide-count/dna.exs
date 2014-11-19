@@ -34,20 +34,20 @@ defmodule DNA do
   def nucleotide_counts(strand) do
     @nucleotides
     |> Enum.map(&process(strand, &1))
-    |> Enum.reduce(%{}, &collate(&1, &2))
+    |> Enum.reduce(%{}, &collate_result(&1, &2))
   end
 
   defp process(strand, nucleotide) do
     collector = self
-    spawn_link fn -> report(collector, strand, nucleotide) end
+    spawn_link fn -> report_count(collector, strand, nucleotide) end
   end
 
-  defp report(collector, strand, nucleotide) do
+  defp report_count(collector, strand, nucleotide) do
     send collector,
       {:nucleotide_count, self, nucleotide, count(strand, nucleotide)}
   end
 
-  defp collate(from, into) do
+  defp collate_result(from, into) do
     receive do
       {:nucleotide_count, ^from, nucleotide, result} ->
         Map.put(into, nucleotide, result)
