@@ -13,7 +13,7 @@ defmodule DNA do
   end
   def hamming_distance(_, _), do: nil
 
-  defp hamming_distance(strand, strand, acc), do: acc
+  defp hamming_distance([], [], acc), do: acc
   defp hamming_distance([head|left_tail], [head|right_tail], acc) do
     hamming_distance(left_tail, right_tail, acc)
   end
