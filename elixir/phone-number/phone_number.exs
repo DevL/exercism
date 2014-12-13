@@ -20,26 +20,32 @@ defmodule Phone do
   def number(raw) do
     raw
     |> clean
-    |> String.to_char_list
     |> trim_us_country_code
     |> clear_invalid
-    |> List.to_string
   end
 
   defp clean(raw) do
     String.replace raw, ~r/\D/, ""
   end
 
-  defp trim_us_country_code(list) when length(list) == 11 do
-    if hd(list) == ?1, do: tl(list), else: list
+  defp trim_us_country_code(cleaned) do
+    if String.starts_with?(cleaned, "1") && String.length(cleaned) == 11 do
+      String.slice(cleaned, 1..10)
+    else
+      cleaned
+    end
   end
-  defp trim_us_country_code(list), do: list
 
-  defp clear_invalid(cleaned) when length(cleaned) == 10, do: cleaned
-  defp clear_invalid(_), do: cleared_number
+  defp clear_invalid(trimmed) do
+    if String.length(trimmed) == 10 do
+      trimmed
+    else
+      cleared_number
+    end
+  end
 
   defp cleared_number do
-    '0000000000'
+    "0000000000"
   end
 
   @doc """
@@ -62,10 +68,8 @@ defmodule Phone do
   @spec area_code(String.t) :: String.t
   def area_code(raw) do
     raw
-    |> String.to_char_list
     |> trim_us_country_code
-    |> List.to_string
-    |> String.slice(0, 3)
+    |> String.slice(0..2)
   end
 
   @doc """
@@ -88,9 +92,7 @@ defmodule Phone do
   @spec pretty(String.t) :: String.t
   def pretty(raw) do
     raw
-    |> String.to_char_list
     |> trim_us_country_code
-    |> List.to_string
     |> split
     |> assemble
   end
