@@ -29,11 +29,15 @@ defmodule Phone do
   end
 
   defp trim_us_country_code(cleaned) do
-    if String.starts_with?(cleaned, "1") && String.length(cleaned) == 11 do
+    if valid_long_distance_number?(cleaned) do
       String.slice(cleaned, 1..10)
     else
       cleaned
     end
+  end
+
+  defp valid_long_distance_number?(cleaned) do
+    String.starts_with?(cleaned, "1") && String.length(cleaned) == 11
   end
 
   defp clear_invalid(trimmed) do
@@ -69,7 +73,7 @@ defmodule Phone do
   def area_code(raw) do
     raw
     |> trim_us_country_code
-    |> String.slice(0..2)
+    |> extract_area_code
   end
 
   @doc """
@@ -99,13 +103,25 @@ defmodule Phone do
 
   defp split(cleaned) do
     {
-      String.slice(cleaned, 0..2),
-      String.slice(cleaned, 3..5),
-      String.slice(cleaned, 6..9)
+      extract_area_code(cleaned),
+      extract_exchange(cleaned),
+      extract_subscriber(cleaned)
     }
   end
 
-  defp assemble({area, first, last}) do
-    "(#{area}) #{first}-#{last}"
+  defp extract_area_code(cleaned) do
+    String.slice(cleaned, 0..2)
+  end
+
+  defp extract_exchange(cleaned) do
+    String.slice(cleaned, 3..5)
+  end
+
+  defp extract_subscriber(cleaned) do
+    String.slice(cleaned, 6..9)
+  end
+
+  defp assemble({area, exchange, subscriber}) do
+    "(#{area}) #{exchange}-#{subscriber}"
   end
 end
