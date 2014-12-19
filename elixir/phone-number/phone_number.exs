@@ -37,7 +37,7 @@ defmodule Phone do
   end
 
   defp valid_long_distance_number?(cleaned) do
-    String.starts_with?(cleaned, "1") && String.length(cleaned) == 11
+    cleaned |> String.starts_with?("1") && cleaned |> String.length == 11
   end
 
   defp clear_invalid(trimmed) do
