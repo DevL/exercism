@@ -21,6 +21,10 @@ defmodule PhoneTest do
     assert Phone.number("11234567890") == "1234567890"
   end
 
+  test "valid when 12 digits and the first two are 1" do
+    assert Phone.number("111234567890") == "0000000000"
+  end
+
   test "invalid when 11 digits" do
     assert Phone.number("21234567890") == "0000000000"
   end
