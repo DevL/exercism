@@ -10,7 +10,7 @@ defmodule School do
   """
   @spec add(Dict.t, String.t, pos_integer) :: Dict.t
   def add(db, name, grade) do
-    Dict.merge(db, Dict.put(%{}, grade, [name]), fn(_key, left, right) -> left ++ right end)
+    Dict.merge(db, new_grade(grade, name), &merge_grades/3)
   end
 
   @doc """
@@ -26,6 +26,18 @@ defmodule School do
   """
   @spec sort(Dict) :: Dict.t
   def sort(db) do
-    Enum.into(db, %{}, fn({grade, names}) -> {grade, Enum.sort(names)} end)
+    Enum.into(db, %{}, &sort_names/1)
+  end
+
+  defp merge_grades(_grade, old, new) do
+    old ++ new
+  end
+
+  defp new_grade(grade, name) do
+    Dict.put(%{}, grade, [name])
+  end
+
+  defp sort_names({grade, names}) do
+    {grade, Enum.sort(names)}
   end
 end
