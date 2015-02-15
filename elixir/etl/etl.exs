@@ -9,10 +9,12 @@ defmodule ETL do
   """
   @spec transform(Dict.t) :: map()
   def transform(input) do
-    Enum.reduce input, %{}, fn({key, values}, map) ->
-      Enum.reduce values, map, fn(value, map) ->
-        Dict.put(map, String.downcase(value), key)
-      end
+    Enum.reduce input, %{}, &transform_single_score/2
+  end
+
+  defp transform_single_score({score, letters}, map) do
+    Enum.reduce letters, map, fn(letter, map) ->
+      Dict.put(map, String.downcase(letter), score)
     end
   end
 end
