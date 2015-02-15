@@ -34,7 +34,7 @@ defmodule School do
   end
 
   defp new_grade(grade, name) do
-    Dict.put(%{}, grade, [name])
+    Dict.put(%{}, grade, [name]) # can be changed to %{grade => [name]} in Elixir 1.1/Erlang R18
   end
 
   defp sort_names({grade, names}) do
