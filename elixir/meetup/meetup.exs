@@ -23,17 +23,21 @@ defmodule Meetup do
     |> find_first(weekday)
   end
 
+  @spec find_first(list(:calendar.date), weekday) :: :calendar.date
   defp find_first(dates, weekday) do
     dates
     |> Enum.find &matching_day_of_the_week?(&1, weekday)
   end
 
+  @spec matching_day_of_the_week?(:calendar.date, weekday) :: boolean
   defp matching_day_of_the_week?(date, weekday) do
     :calendar.day_of_the_week(date) == @day_of_the_week[weekday]
   end
 
+  @spec relevant_dates(pos_integer, pos_integer, schedule) :: list(:calendar.date)
   defp relevant_dates(year, month, schedule), do: dates(year, month, search_range(year, month, schedule))
 
+  @spec search_range(pos_integer, pos_integer, schedule) :: 1..31
   defp search_range(_, _, :first), do: 1..7
   defp search_range(_, _, :second), do: 8..14
   defp search_range(_, _, :third), do: 15..21
@@ -41,10 +45,12 @@ defmodule Meetup do
   defp search_range(_, _, :teenth), do: 13..19
   defp search_range(year, month, :last), do: last_seven_days_ending_with :calendar.last_day_of_the_month(year, month)
 
+  @spec dates(pos_integer, pos_integer, 1..31) :: list(:calendar.date)
   defp dates(year, month, days) do
     Enum.map days, fn(day) -> {year, month, day} end
   end
 
+  @spec last_seven_days_ending_with(pos_integer) :: 22..31
   defp last_seven_days_ending_with(day) do
     (day - 6)..day
   end
