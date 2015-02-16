@@ -1,4 +1,9 @@
 defmodule PrimeFactors do
+  defmacro divisible?(number, divisor) do
+    quote do
+      rem(unquote(number), unquote(divisor)) == 0
+    end
+  end
   @doc """
   Compute the prime factors for 'number'.
 
@@ -15,11 +20,10 @@ defmodule PrimeFactors do
 
   defp factors_for(1, _, factors), do: factors
   defp factors_for(number, number, factors), do: [number|factors]
+  defp factors_for(number, divisor, factors) when divisible?(number, divisor) do
+    factors_for(div(number, divisor), 2, [divisor|factors])
+  end
   defp factors_for(number, divisor, factors) do
-    if rem(number, divisor) == 0  do
-      factors_for(trunc(number / divisor), 2, [divisor|factors])
-    else
-      factors_for(number, divisor + 1, factors)
-    end
+    factors_for(number, divisor + 1, factors)
   end
 end
