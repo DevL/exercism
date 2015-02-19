@@ -1,5 +1,5 @@
 defmodule Year do
-  defmacro divisble_by?(year, number) do
+  defmacro divisible_by?(year, number) do
     quote do
       rem(unquote(year), unquote(number)) == 0
     end
@@ -14,8 +14,8 @@ defmodule Year do
     except every year that is evenly divisible by 100
       except every year that is evenly divisible by 400.
   """
-  @spec leap_year?(non_neg_integer) :: boolean
-  def leap_year?(year) when year |> divisble_by?(400) , do: true
-  def leap_year?(year) when year |> divisble_by?(100), do: false
-  def leap_year?(year), do: year |> divisble_by?(4)
+  @spec leap_year?(integer) :: boolean
+  def leap_year?(year) when year |> divisible_by?(400), do: true
+  def leap_year?(year) when year |> divisible_by?(100), do: false
+  def leap_year?(year), do: year |> divisible_by?(4)
 end
