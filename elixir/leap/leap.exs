@@ -1,9 +1,13 @@
-defmodule Year do
-  defmacro divisible_by?(year, number) do
+defmodule GuardSafe do
+  defmacro divisible_by?(number, divisor) do
     quote do
-      rem(unquote(year), unquote(number)) == 0
+      rem(unquote(number), unquote(divisor)) == 0
     end
   end
+end
+
+defmodule Year do
+  import GuardSafe, only: [divisible_by?: 2]
 
   @doc """
   Returns whether 'year' is a leap year.
