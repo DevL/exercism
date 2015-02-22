@@ -17,8 +17,8 @@ defmodule Sieve do
 
   defp remove_candidates(prime, candidates) do
     candidates
-    |> Enum.reject &divisable_by(&1, prime)
+    |> Enum.reject &divisible_by(&1, prime)
   end
 
-  defp divisable_by(candidate, prime), do: rem(candidate, prime) == 0
+  defp divisible_by(candidate, prime), do: rem(candidate, prime) == 0
  end
