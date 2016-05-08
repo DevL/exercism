@@ -6,18 +6,22 @@ defmodule Sieve do
   def primes_to(limit) do
     2..limit
     |> Enum.to_list
-    |> collect_primes([])
+    |> collect_primes
     |> Enum.reverse
   end
 
+  defp collect_primes(candidates), do: collect_primes(candidates, [])
+
   defp collect_primes([], primes), do: primes
   defp collect_primes([prime|candidates], primes) do
-    collect_primes(remove_candidates(prime, candidates), [prime|primes])
+    prime
+    |> remove_candidates(candidates)
+    |> collect_primes([prime|primes])
   end
 
   defp remove_candidates(prime, candidates) do
     candidates
-    |> Enum.reject &divisible_by(&1, prime)
+    |> Enum.reject(&divisible_by(&1, prime))
   end
 
   defp divisible_by(candidate, prime), do: rem(candidate, prime) == 0
