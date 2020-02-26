@@ -20,9 +20,19 @@ class Garden:
         self.assigned_plants = dict(zip(sorted(students), self.plant_groups(diagram)))
 
     def plants(self, student):
-        return [self.PLANTS[plant] for plant in self.assigned_plants[student]]
+        return self.assigned_plants[student]
 
     def plant_groups(self, rows):
         first_row, second_row = rows.split()
         for start in range(0, len(first_row), 2):
-            yield first_row[start : start + 2] + second_row[start : start + 2]
+            yield self.to_plants(
+                [
+                    first_row[start],
+                    first_row[start + 1],
+                    second_row[start],
+                    second_row[start + 1],
+                ]
+            )
+
+    def to_plants(self, plant_symbols):
+        return list(map(self.PLANTS.get, plant_symbols))
