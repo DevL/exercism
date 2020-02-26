@@ -17,12 +17,7 @@ class Garden:
     ]
 
     def __init__(self, diagram, students=STUDENTS):
-        self.diagram = diagram
-        self.students = sorted(students)
-
-        # chunk plants
-        plant_groups = list(self.plant_groups(diagram))
-        self.assigned_plants = dict(zip(self.students, plant_groups))
+        self.assigned_plants = dict(zip(sorted(students), self.plant_groups(diagram)))
 
     def plants(self, student):
         return [self.PLANTS[plant] for plant in self.assigned_plants[student]]
