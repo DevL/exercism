@@ -1,3 +1,6 @@
 .DS_Store
 *.beam
 *.dSYM
+__pycache__/
+*.py[cod]
+*$py.class
